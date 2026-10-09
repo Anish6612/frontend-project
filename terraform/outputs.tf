@@ -27,8 +27,8 @@ output "codepipeline_name" {
 }
 
 output "codestar_connection_arn" {
-  description = "Approve this connection once in console (PENDING -> AVAILABLE)."
-  value       = aws_codestarconnections_connection.github.arn
+  description = "Reused AVAILABLE connection when var is set; otherwise the new PENDING one."
+  value       = local.connection_arn
 }
 
 output "github_repo_url" {

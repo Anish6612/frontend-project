@@ -39,3 +39,9 @@ variable "codebuild_image" {
   type        = string
   default     = "aws/codebuild/amazonlinux2-x86_64-standard:5.0"
 }
+
+variable "codestar_connection_arn" {
+  description = "Existing CodeConnections ARN (Status Available). When set, Terraform reuses it instead of creating a new connection — avoids needing codeconnections:CreateConnection."
+  type        = string
+  default     = ""
+}

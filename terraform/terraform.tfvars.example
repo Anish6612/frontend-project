@@ -4,3 +4,5 @@ github_owner = "Anish6612"
 github_repo  = "frontend-project"
 github_branch = "main"
 price_class  = "PriceClass_100"
+# Reuse your AVAILABLE console connection instead of creating a new PENDING one:
+codestar_connection_arn = "arn:aws:codeconnections:us-east-1:872857212221:connection/6b8c5b05-cc7a-4406-a03d-ecc6661c87d7"

@@ -1,8 +1,14 @@
 # AWS-native pipeline: GitHub (via CodeStar Connection) -> CodePipeline -> CodeBuild -> S3 + CloudFront.
-# IMPORTANT learning point: aws_codestarconnections_connection starts in PENDING.
-# You must click "Update pending connection" once in AWS Console -> Developer Tools -> Connections.
+# Reuses an existing AVAILABLE connection when var.codestar_connection_arn is set.
+# Otherwise creates a new one (starts PENDING, needs one console approval).
+
+locals {
+  # "" => create new; non-empty => reuse provided ARN (your case)
+  connection_arn = var.codestar_connection_arn != "" ? var.codestar_connection_arn : aws_codestarconnections_connection.github[0].arn
+}
 
 resource "aws_codestarconnections_connection" "github" {
+  count         = var.codestar_connection_arn == "" ? 1 : 0
   name          = "${var.project_name}-github"
   provider_type = "GitHub"
 }
@@ -148,7 +154,7 @@ data "aws_iam_policy_document" "codepipeline_policy" {
     actions = [
       "codestar-connections:UseConnection"
     ]
-    resources = [aws_codestarconnections_connection.github.arn]
+    resources = [local.connection_arn]
   }
 }
 
@@ -182,7 +188,7 @@ resource "aws_codepipeline" "frontend" {
       version          = "1"
       output_artifacts = ["source_output"]
       configuration = {
-        ConnectionArn    = aws_codestarconnections_connection.github.arn
+        ConnectionArn    = local.connection_arn
         FullRepositoryId = "${var.github_owner}/${var.github_repo}"
         BranchName       = var.github_branch
       }
