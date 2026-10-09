@@ -1,0 +1,6 @@
+aws_region   = "us-east-1"
+project_name = "frontend-project"
+github_owner = "Anish6612"
+github_repo  = "frontend-project"
+github_branch = "main"
+price_class  = "PriceClass_100"

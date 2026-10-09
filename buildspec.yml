@@ -1,0 +1,21 @@
+version: 0.2
+
+# Used by AWS CodePipeline -> CodeBuild path.
+# SITE_BUCKET and DISTRIBUTION_ID come from terraform codebuild environment_variable (no hardcoding).
+phases:
+  pre_build:
+    commands:
+      - echo "Syncing from $CODEBUILD_SRC_DIR"
+      - ls -R
+  build:
+    commands:
+      - echo "Deploying frontend/ to s3://$SITE_BUCKET"
+      - aws s3 sync frontend/ s3://$SITE_BUCKET/ --delete --cache-control "public,max-age=300"
+  post_build:
+    commands:
+      - echo "Invalidating CloudFront $DISTRIBUTION_ID"
+      - aws cloudfront create-invalidation --distribution-id "$DISTRIBUTION_ID" --paths "/*"
+      - echo "Done"
+artifacts:
+  files:
+    - '**/*'

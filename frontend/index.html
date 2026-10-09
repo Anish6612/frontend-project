@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Frontend Pipeline Demo — CloudFront + S3</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="card">
+    <p class="pill">S3 → CloudFront (OAC) • Deployed by pipeline</p>
+    <h1>🚀 Random Page on CloudFront</h1>
+    <p class="sub">Every reload generates something random. If you see this via your CloudFront URL, both pipelines work.</p>
+
+    <section class="grid">
+      <div class="box">
+        <h2>Random number</h2>
+        <p id="randNum" class="big">…</p>
+        <button id="btnNum">New number</button>
+      </div>
+      <div class="box">
+        <h2>Random gradient</h2>
+        <div id="swatch" class="swatch"></div>
+        <button id="btnColor">New gradient</button>
+      </div>
+      <div class="box">
+        <h2>Random DevOps tip</h2>
+        <p id="tip">…</p>
+        <button id="btnTip">New tip</button>
+      </div>
+    </section>
+
+    <footer>
+      <p>Build: <span id="buildTime"></span> • Account learning demo • Region us-east-1</p>
+      <p><a href="error.html">error page</a> • Edit <code>frontend/</code>, push to <code>main</code>, watch pipeline deploy.</p>
+    </footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

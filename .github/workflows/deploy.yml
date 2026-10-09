@@ -1,0 +1,32 @@
+name: deploy-frontend
+
+# GitHub Actions path (modern, fully automated via OIDC).
+# After `terraform apply`, set these repo Variables:
+#   AWS_REGION, S3_BUCKET, DISTRIBUTION_ID, AWS_ROLE_ARN (from terraform outputs)
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/deploy.yml'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Sync to S3
+        run: aws s3 sync frontend/ s3://${{ vars.S3_BUCKET }}/ --delete
+
+      - name: Invalidate CloudFront
+        run: aws cloudfront create-invalidation --distribution-id ${{ vars.DISTRIBUTION_ID }} --paths "/*"
