@@ -4,6 +4,6 @@
 *.tfvars
 !*.tfvars.example
 tfplan
-plan.txt
-apply.txt
+plan*.txt
+apply*.txt
 .DS_Store
